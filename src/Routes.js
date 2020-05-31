@@ -10,8 +10,7 @@ import TypographyPage from '@/pages/Typography/Typography';
 // Tables
 import TablesBasicPage from '@/pages/Tables/Basic';
 
-// Maps
-import GoogleMapPage from '@/pages/Maps/Google';
+
 
 // Main
 import AnalyticsPage from '@/pages/Dashboard/Dashboard';
@@ -24,8 +23,10 @@ import IconsPage from '@/pages/Icons/Icons';
 import NotificationsPage from '@/pages/Notifications/Notifications';
 //paginas del sistema
 import Proveedor from '@/pages/Proveedores/Proveedor';
-import Linea from '@/pages/Lineas/Lineas'
-import Sublinea from '@/pages/Sublineas/Sublineas'
+import Linea from '@/pages/Lineas/Lineas';
+import Sublinea from '@/pages/Sublineas/Sublineas';
+import General from '@/pages/General/General';
+import Impuestos from '@/pages/Impuestos/Impuestos';
 Vue.use(Router);
 
 export default new Router({
@@ -78,7 +79,7 @@ export default new Router({
         {
           path: 'components/maps',
           name: 'GoogleMapPage',
-          component: GoogleMapPage,
+          component: General,
         },
       ],
     },
@@ -104,5 +105,22 @@ export default new Router({
         }
       ]
     },
+    {
+      path:"/configuracion",
+      name:'Configuracion',
+      component:Layout,
+      children:[
+        {
+          path:'general',
+          name:'General',
+          component: General
+        },
+        {
+          path:'impuestos',
+          name:'Impuestos',
+          component:Impuestos
+        }
+      ]
+    }
   ],
 });

@@ -29,29 +29,29 @@
               { header: 'Lineas', link: '/compras/compra/linea' },
               { header: 'Sublineas', link: '/compras/compra/sublinea' },
             ]"/>
-        <NavLink
+            <NavLink
             :activeItem="activeItem"
-            header="Typography"
-            link="/app/typography"
-            iconName="fi flaticon-list"
-            index="typography"
-            isHeader
+            header="Ventas"
+            link="/ventas"
+            iconName="glyphicon glyphicon-shopping-cart"
+            index="ventas"
+            :childrenLinks="[
+              { header: 'Venta', link: '/app/components/charts' },
+              { header: 'Facturacion', link: '/app/components/icons' },
+              { header: 'Cierre Diario', link: '/app/components/maps' },
+            ]"
         />
-        <NavLink
+         <NavLink
             :activeItem="activeItem"
-            header="Tables Basic"
-            link="/app/tables"
-            iconName="fi flaticon-equal-1"
-            index="tables"
-            isHeader
-        />
-        <NavLink
-            :activeItem="activeItem"
-            header="Notifications"
-            link="/app/notifications"
-            iconName="fi flaticon-star"
-            index="notifications"
-            isHeader
+            header="Inventario"
+            link="/inventario"
+            iconName="glyphicon glyphicon-list-alt"
+            index="inventario"
+            :childrenLinks="[
+              { header: 'Inventario', link: '/app/components/charts' },
+              { header: 'Kardex', link: '/app/components/icons' },
+              { header: 'Ajuste Inventario', link: '/app/components/maps' },
+            ]"
         />
         <NavLink
             :activeItem="activeItem"
@@ -65,50 +65,31 @@
               { header: 'Maps', link: '/app/components/maps' },
             ]"
         />
+        <NavLink
+          :activeItem="activeItem"
+          header="Seguridad"
+          link="/seguridad"
+          iconName="glyphicon glyphicon-glyph-lock"
+          index="seguridad"
+          :childrenLinks="[
+            {header:' Usuarios',link:'/configuracion/general'},  
+             {header:'Perfiles Usuarios',link:'/configuracion/impuestos'}  
+          ]"
+        />
+        <NavLink
+          :activeItem="activeItem"
+          header="Configuracion"
+          link="/configuracion"
+          iconName="glyphicon glyphicon-cog"
+          index="configuracion"
+          :childrenLinks="[
+            {header:' Datos Generales',link:'/configuracion/general'},  
+             {header:'Config. Impuestos',link:'/configuracion/impuestos'}  
+          ]"
+        />
+
       </ul>
-      <p>
-      <h5 class="navTitle">
-        LABELS
-        <a class="actionLink">
-          <i class="la la-plus float-right"/>
-        </a>
-      </h5>
-      <ul class="sidebarLabels">
-        <li>
-          <a href="#">
-            <i class="fa fa-circle text-danger mr-2"/>
-            <span class="labelName">My Recent</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <i class="fa fa-circle text-primary mr-2"/>
-            <span class="labelName">Starred</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <i class="fa fa-circle mr-2"/>
-            <span class="labelName">Background</span>
-          </a>
-        </li>
-      </ul>
-      <h5 class="navTitle">
-        PROJECTS
-      </h5>
-      <div class="sidebarAlerts">
-        <b-alert
-            v-for="alert in alerts"
-            :key="alert.id"
-            class="sidebarAlert" variant="transparent"
-            show dismissible
-        >
-          <span>{{alert.title}}</span><br/>
-          <b-progress class="sidebarProgress progress-xs mt-1"
-                      :variant="alert.color" :value="alert.value" :max="100"/>
-          <small>{{alert.footer}}</small>
-        </b-alert>
-      </div>
+     
     </nav>
   </div>
 </template>
