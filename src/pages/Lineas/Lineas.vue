@@ -134,7 +134,7 @@ export default {
             id:0,
             lista:[],
             titulomodal:'Nueva Linea',
-           ip:process.env.VUE_APP_BASE_URL,
+           ip:process.env.VUE_APP_BASE_URL, //obtiene la ip de la api
            edicion:false,
            nuevo:false,
            formulario:{linea:''},
@@ -158,17 +158,28 @@ export default {
             then(response =>{ 
                 this.lista=response.data
             }).catch(error =>{
-                let mensaje=error.response.response
-                this.$toasted.error('Error:'+mensaje, {
-                                        position: 'top-center',
-                                        action: {
-                                        text: 'cerrar',
-                                        onClick: (e, toastObject) => {
-                                            toastObject.goAway(0);
-                                        }
-                                        }
-                                    })
-            
+                if(error.response){
+                    let mensaje=error.response.response
+                    this.$toasted.error('Error:'+mensaje, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                }else{
+                    this.$toasted.error('Error:'+error, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                }
             })
         },
         mostrarDatos(id){

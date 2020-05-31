@@ -25,6 +25,7 @@ import NotificationsPage from '@/pages/Notifications/Notifications';
 //paginas del sistema
 import Proveedor from '@/pages/Proveedores/Proveedor';
 import Linea from '@/pages/Lineas/Lineas'
+import Sublinea from '@/pages/Sublineas/Sublineas'
 Vue.use(Router);
 
 export default new Router({
@@ -95,6 +96,11 @@ export default new Router({
           path:'compra/linea',
           name:'Linea',
           component: Linea
+        },
+        {
+          path:'compra/sublinea',
+          name:'Sublinea',
+          component:Sublinea
         }
       ]
     },

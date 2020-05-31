@@ -24,7 +24,7 @@
             iconName="fa fa-truck"
             index="compras"
             :childrenLinks="[
-              { header: 'Compras', link: '' },
+              { header: 'Compras', link: '/compras/compra/compras' },
               { header: 'Proveedores', link: '/compras/compra/proveedor' },
               { header: 'Lineas', link: '/compras/compra/linea' },
               { header: 'Sublineas', link: '/compras/compra/sublinea' },
