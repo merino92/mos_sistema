@@ -15,9 +15,11 @@ import layoutMixin from './mixins/layout';
 import Widget from './components/Widget/Widget';
 import { ModalPlugin } from 'bootstrap-vue'
 import VueSweetalert2 from 'vue-sweetalert2';
+import datePicker from 'vue-bootstrap-datetimepicker';
 
 Vue.use(BootstrapVue);
 Vue.use(ModalPlugin);
+Vue.use(datePicker);
 Vue.use(VueSweetalert2);
 Vue.use(VueTouch);
 Vue.use(Trend);
