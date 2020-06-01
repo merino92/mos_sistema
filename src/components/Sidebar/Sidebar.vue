@@ -48,7 +48,7 @@
             iconName="glyphicon glyphicon-list-alt"
             index="inventario"
             :childrenLinks="[
-              { header: 'Inventario', link: '/app/components/charts' },
+              { header: 'Inventario', link: '/inventario/inventario' },
               { header: 'Kardex', link: '/app/components/icons' },
               { header: 'Ajuste Inventario', link: '/app/components/maps' },
             ]"

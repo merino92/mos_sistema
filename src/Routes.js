@@ -27,6 +27,7 @@ import Linea from '@/pages/Lineas/Lineas';
 import Sublinea from '@/pages/Sublineas/Sublineas';
 import General from '@/pages/General/General';
 import Impuestos from '@/pages/Impuestos/Impuestos';
+import Inventario from '@/pages/Inventario/Inventario';
 Vue.use(Router);
 
 export default new Router({
@@ -119,6 +120,18 @@ export default new Router({
           path:'impuestos',
           name:'Impuestos',
           component:Impuestos
+        }
+      ]
+    },
+    {
+      path:'/inventario',
+      name:'Inventario',
+      component:Layout,
+      children:[
+        {
+          path:'inventario',
+          name:'Inventario',
+          component:Inventario
         }
       ]
     }
