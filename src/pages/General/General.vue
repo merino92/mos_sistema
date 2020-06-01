@@ -18,34 +18,42 @@
                  customHeader
                 >
                 <b-row>
-                    <b-col cols="8" class="mt-5">
+                    <b-col cols="8" class="mt-2">
                         <b-form-group class="mt-2">
                             <label for="">Nombre de la Empresa</label>
-                            <b-form-input type="text" placeholder="Nombre" ></b-form-input>
+                            <b-form-input type="text" v-model="formulario.nombre" placeholder="Nombre" ></b-form-input>
                         </b-form-group>
                         <b-form-group>
                             <label for="">Direccion</label>
-                            <b-form-input type="text" placeholder="Direccion de la empresa"></b-form-input>
+                            <b-form-input type="text" v-model="formulario.direccion" placeholder="Direccion de la empresa"></b-form-input>
                         </b-form-group>
                         <b-row>
                             <b-col cols="6">
                                 <b-form-group>
                                     <label for="">Telefono</label>
-                                    <b-form-input type="text" placeholder="Telefono"></b-form-input>
+                                    <b-form-input type="text" v-model="formulario.telefono" placeholder="Telefono"></b-form-input>
                                 </b-form-group>
                             </b-col>
                             <b-col cols="6">
                                 <label for="">Tipo de Contribuyente</label>
-                                <b-form-select></b-form-select>
+                                <b-form-select v-model="opcion"
+                                :options="opciones"
+                                ></b-form-select>
                             </b-col>
                         </b-row>
                         
                     </b-col>
-                    <b-col cols="4">
+                    <b-col cols="3" offset-md="1">
                          <label for="">Logo/Imagen</label>
-                        <div class="">
-                             <img class="img-fluid" id="img" :src="this.imagen" alt="">
-                                
+                        <div class="hovereffect">
+                             <b-img fluid id="img" :src="this.imagen" alt=""></b-img>
+                              <div class="overlay">
+                                     <h2>Cambiar Imagen</h2>
+                                    <a class="info" href="#" @click="Imagen()">
+                                        <b-form-file horizontal id="imgfile" accept="image/*"  style="display:none">
+                                        </b-form-file>
+                                        Actualizar</a>
+                                </div>  
                         </div>
                     </b-col>
                 </b-row> 
@@ -107,15 +115,92 @@ export default {
     data(){
         return {
             imagen:require('@/assets/camara.png'),
+            imgnueva:0,
+            ip:process.env.VUE_APP_BASE_URL,
+            imgapi:false,
+            formulario:{
+                nombre:'',
+                contribuyente:null,
+                nsociedad:'',
+                telefono:'',
+                nit:'',
+                nrc:'',
+                pgiro:'',
+                sgiro:'',
+                tgiro:'',
+                direccion:'',
+                imagen:'',
+                opcion:1,
+            },
+            opciones:[
+                { value: 1, text: 'PEQUEÑO' },
+                { value: 2, text: 'MEDIANO' },
+                { value: 3, text: 'GRANDE' },
+            ]
         }
-    }
+    },
+    methods:{
+        Imagen(){
+             document.getElementById('imgfile').click();
+        },
+        ListarConfiguracion(){
+            let ip=this.ip+'/api/v1.0/Configuracion/'
+            axios.get(ip).then(response =>{
+                let data=response.data 
+               
+                if(data.error>0){
+                    this.$toasted.error('Error:'+data.response, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                }else{
+                    let datos=data.response
+                    datos.forEach(e => {
+                        let element=JSON.parse(e.datos_generales)
+                        
+                        document.getElementById('nempresa').value=element.nombre
+                        document.getElementById('cte').selectedIndex=(Number(element.contribuyente)-1)
+                        document.getElementById('nsociedad').value=element.propietario
+                        document.getElementById('nit').value = element.nit
+                        document.getElementById('nrc').value = element.nrc 
+                        document.getElementById('pgiro').value = element.pgiro
+                        document.getElementById('direccion').value = element.direccion
+                        document.getElementById('telefono').value = element.telefono
+                        document.getElementById('sgiro').value = element.sgiro
+                        document.getElementById('tgiro').value = element.tgiro
+                        if(element.nombre_imagen !=null){
+                           this.imagen=this.ip+'/static/'+element.nombre_imagen
+                            this.imgapi=true
+                        }else{
+                            this.imagen=this.img
+                            this.imgapi=false
+                        }
+                        this.imgnueva=0
+
+                        
+                        
+                    })
+                }
+
+            }).catch(error =>{
+                // eslint-disable-next-line no-console
+                console.log(error)
+            })
+        }
+
+    },
 }
 </script>
 
 <style lang="css">
    .hovereffect {
   width: 100%;
-  height: 100%;
+  height: 90%;
   float: left;
   overflow: hidden;
   position: relative;

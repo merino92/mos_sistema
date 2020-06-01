@@ -3,54 +3,45 @@
     <b-container>
       <h5 class="auth-logo">
         <i class="fa fa-circle text-primary"></i>
-        Sing App
+          ARTEMISA
         <i class="fa fa-circle text-danger"></i>
       </h5>
-      <Widget class="widget-auth mx-auto" title="<h3 class='mt-0'>Login to your Web App</h3>" customHeader>
+      <Widget class="widget-auth mx-auto hola" title="" customHeader>
+        <h3 class='mt-0 title'>Ingresa a la App</h3>
         <p class="widget-auth-info">
-            Use your email to sign in.
+            Usa tu usuario y clave para acceder
         </p>
         <form class="mt" @submit.prevent="login">
           <b-alert class="alert-sm" variant="danger" :show="!!errorMessage">
             {{errorMessage}}
           </b-alert>
           <div class="form-group">
-            <input class="form-control no-border" ref="email" required type="email" name="email" placeholder="Email" />
+            <input class="form-control no-border" ref="email" required type="text" name="email" placeholder="Usuario" />
           </div>
           <div class="form-group">
-            <input class="form-control no-border" ref="password" required type="password" name="password" placeholder="Password" />
+            <input class="form-control md no-border" ref="password" required type="password" name="password" placeholder="Password" />
           </div>
-          <b-button type="submit" size="sm" class="auth-btn mb-3" variant="inverse">Login</b-button>
-          <p class="widget-auth-info">or sign in with</p>
-          <div class="social-buttons">
-            <b-button variant="primary" class="social-button mb-2">
-              <i class="social-icon social-google"></i>
-              <p class="social-text">GOOGLE</p>
-            </b-button>
-            <b-button variant="success" class="social-button">
-              <i class="social-icon social-microsoft"></i>
-              <p class="social-text">MICROSOFT</p>
-            </b-button>
-          </div>
+          <b-button type="submit" size="md" class="auth-btn  mb-3" variant="success">Ingresar</b-button>   
+          <b-col class="mb-5"></b-col> 
         </form>
         <p class="widget-auth-info">
-          Don't have an account? Sign up now!
+          No tienes una cuenta?
         </p>
-        <router-link class="d-block text-center" to="login">Create an Account</router-link>
+        <router-link class="d-block text-center"  to="login"> <div>Crear una</div></router-link>
       </Widget>
     </b-container>
     <footer class="auth-footer">
-      2019 &copy; Sing App Vue Admin Dashboard Template.
+      2020 &copy; Artemisa porwer by MOS Tecnology.
     </footer>
   </div>
 </template>
 
 <script>
 import Widget from '@/components/Widget/Widget';
-
+import Sparklines from '@/components/Sparklines/Sparklines'
 export default {
   name: 'LoginPage',
-  components: { Widget },
+  components: { Widget,Sparklines },
   data() {
     return {
       errorMessage: null,
@@ -72,5 +63,30 @@ export default {
       this.$router.push('/app/main/analytics');
     }
   },
+  alerta(){
+    // eslint-disable-next-line no-console
+    console.log('entra')
+    this.$toasted.error('Error:', {
+                                    position: 'top-center',
+                                    action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+  }
 };
 </script>
+
+<style lang="scss" scoped>
+  $text-color: #002b49 !default;
+  $titulo-color:#ecfaec !default;
+    .hola{
+      background-color : $text-color;
+    }
+    .title{
+      margin-top: 0;
+      color:$titulo-color;
+    }
+</style>

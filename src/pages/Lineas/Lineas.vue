@@ -10,15 +10,15 @@
                  customHeader>
                     <b-row>
                         <b-col cols="12" class="d-flex">
-                                   <b-button class="btn btn-success ml-auto" @click="limpiar(),$bvModal.show('modal'),editar=false,nuevo=true,bloqueado=0" ><i class="glyphicon glyphicon-plus"></i> Nuevo</b-button>  
+                                   <b-button class="btn btn-success ml-auto" @click="limpiar(),$bvModal.show('modal'),editar=false,nuevo=true,bloqueado=0" ><i class="glyphicon icono glyphicon-plus"></i> Nuevo</b-button>  
                         </b-col>
                     </b-row>
                     <b-row>
                         <b-col cols="6">
-                            <b-form-input type="text" placeholder="Buscar" ></b-form-input>
+                            <b-form-input type="search" v-model="buscar" v-on:Keyup="Limpiar()" v-on:keyup.enter="Busqueda()" placeholder="Buscar Nombre de Linea" ></b-form-input>
                         </b-col>
                         <b-col cols="2">
-                            <b-button class="btn btn-info" >Buscar</b-button>
+                            <b-button class="btn btn-info" @click="Busqueda()" >Buscar</b-button>
                         </b-col>
                     </b-row>
                     <b-row class="mt-2">
@@ -47,12 +47,12 @@
                                                 </td>
                                                 <td>
                                                     <b-button  class='btn btn-info btn-sm ' @click="mostrarDatos(datos.id),bloqueado=1,nuevo=false,edicion=false">
-                                                    <span class="glyphicon glyphicon-zoom-in"></span>
+                                                    <span class="glyphicon icono glyphicon-zoom-in"></span>
                                                     </b-button>    
                                                     <b-button  class='btn btn-warning btn-sm ml-1' @click="mostrarDatos(datos.id),bloqueado=0,nuevo=false,edicion=true">
-                                                    <span class="glyphicon glyphicon-pencil"></span></b-button>
+                                                    <span class="glyphicon icono glyphicon-pencil"></span></b-button>
                                                     <b-button type="button" class="btn btn-danger btn-sm ml-1" @click="modalEliminar(datos.id)" >
-                                                    <span class="glyphicon glyphicon-trash"></span></b-button>   
+                                                    <span class="glyphicon icono glyphicon-trash"></span></b-button>   
                                                 </td>
                                             </tr>
                                     </tbody>
@@ -141,7 +141,8 @@ export default {
            linea:{linea:''},
            formState:null, //validacion de campos
            seleccionado:true, //cheque
-            bloqueado:0
+            bloqueado:0,
+            buscar:''
         }
     },
     methods:{
@@ -450,6 +451,69 @@ export default {
         modalEliminar(id){
             this.id=id
             this.$bvModal.show('eliminar')
+        },
+        Busqueda(){
+            // eslint-disable-next-line no-console
+            console.log(this.buscar)
+            if(this.buscar.length>0){
+                const url=this.ip+'/api/v1.0/Linea/1/Busquedalinea/'
+                const datos={
+                    busqueda:this.buscar.toUpperCase()
+                }
+                axios.post(url,datos).
+                then(response=>{
+                    const res=response.data
+                    if(res.error>0){
+                         this.$toasted.error('Error: '+res.response, {
+                                        position: 'top-center',
+                                        action: {
+                                        text: 'cerrar',
+                                        onClick: (e, toastObject) => {
+                                            toastObject.goAway(0);
+                                        }
+                                        }
+                                    }) 
+                    }else{
+                       this.lista.length=0
+                        this.lista=res.response
+                    }
+
+                }).
+                catch(error=>{
+                    if(error.response){
+                        const msg=error.response.data.response
+                        this.$toasted.error('Error: '+msg, {
+                                        position: 'top-center',
+                                        action: {
+                                        text: 'cerrar',
+                                        onClick: (e, toastObject) => {
+                                            toastObject.goAway(0);
+                                        }
+                                        }
+                                    }) 
+                    
+                    }else{
+                        this.$toasted.error('Error: '+error, {
+                                        position: 'top-center',
+                                        action: {
+                                        text: 'cerrar',
+                                        onClick: (e, toastObject) => {
+                                            toastObject.goAway(0);
+                                        }
+                                        }
+                                    }) 
+                    }
+                    
+                })
+            }else{
+                this.ListarLineas()
+            }
+
+        },
+        Limpiar(){
+            if(this.buscar.length<=0){
+                this.ListarLineas()
+            }
         }
     },
     mounted(){
@@ -458,3 +522,9 @@ export default {
 
 }
 </script>
+
+<style scoped>
+    .icono {
+     vertical-align: top !important; 
+    }
+</style>
