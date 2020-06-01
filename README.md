@@ -1,5 +1,7 @@
 # vue-cli
-
+```
+tienes que installar yarn y nodejs
+```
 ## Project setup
 ```
 yarn install
