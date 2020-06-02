@@ -85,7 +85,7 @@
             <template v-slot:modal-footer={}>
                 <b-button size="sm" v-if="edicion==true" variant="info" @click="updateLinea()"> <!--v-if sirve para ocultar o mostrar dependiendo de la condicion-->
                 Editar</b-button>
-                <b-button size="sm" v-if="nuevo==true" variant="success" @click="CrearLinea()">
+                <b-button size="sm" v-if="nuevo==true" variant="success" @click="crearLinea()">
                     Guardar
                 </b-button>
                 <b-button size="sm"  variant="danger" @click="$bvModal.hide('modal')">
@@ -231,7 +231,7 @@ export default {
                  }
              })
         },
-        CrearLinea(){
+        crearLinea(){
             if(this.formulario.linea.length>0){
                 this.formState=null
                 const url=this.ip+"/api/v1.0/Linea/"

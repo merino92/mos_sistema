@@ -88,7 +88,7 @@
             <template v-slot:modal-footer={}>
                 <b-button size="sm" v-if="edicion==true" variant="info" @click="editarSublinea()"> <!--v-if sirve para ocultar o mostrar dependiendo de la condicion-->
                 Editar</b-button>
-                <b-button size="sm" v-if="nuevo==true" variant="success" @click="CrearLinea()">
+                <b-button size="sm" v-if="nuevo==true" variant="success" @click="crearSublinea()">
                     Guardar
                 </b-button>
                 <b-button size="sm"  variant="danger" @click="$bvModal.hide('modal')">
@@ -244,6 +244,85 @@
                                         })
                 }
             })
+        },
+        crearSublinea(){
+            if(this.sublinea.nombre.length >0){
+                this.formState=null
+                const url=this.ip+"/api/v1.0/Sublinea/"
+                const data={
+                    sublinea: this.sublinea.nombre.toUpperCase(),
+                    idlinea:this.opcion,
+                    activo:this.seleccionado
+                }
+                axios.post(url,data).
+                then(response =>{
+                    const data=response.data
+                    // eslint-disable-next-line no-console
+                    console.log(response)
+                    if(data.error >0){
+                        this.$toasted.error('Error:'+data.response, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                    }else{
+                        this.id=0
+                        this.opcion=null
+                        this.activo=true
+                        this.sublinea.nombre=''
+                        this.listarSublinea()
+                        this.$bvModal.hide('modal')
+                        this.$toasted.success(data.response, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+
+                    }
+                }).catch(error =>{
+                    if(error.response){
+                        this.$toasted.error('Error:'+error.response.data.response, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                    }else{
+                       this.$toasted.error('Error:'+error, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        }) 
+                    }
+                })
+            }else{
+                this.formState=false
+                this.$toasted.error('Error: debes llenar los campos obligatorios', {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+            }
+
         },
         editarSublinea(){
             if(this.sublinea.nombre.length >0){

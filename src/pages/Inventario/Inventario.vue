@@ -1,3 +1,4 @@
+
 <template>
     <div id="inventario">
         <h1 class="page-title">
@@ -107,7 +108,10 @@
                                     <b-col cols="12">
                                         <b-form-group>
                                             <label for="">Proveedor</label>
-                                            <b-form-select></b-form-select>
+                                            <b-form-select 
+                                                v-model="proveedor.opcion"
+                                                :options="proveedor.opciones"
+                                             ></b-form-select>
                                         </b-form-group>
                                     </b-col>
                                 </b-row>
@@ -123,7 +127,10 @@
                             <b-col cols="6">
                                 <b-form-group>
                                             <label for="">Tipo de producto</label>
-                                            <b-form-select></b-form-select>
+                                            <b-form-select
+                                                v-model="tipo.opcion"
+                                                :options="tipo.opciones"
+                                             ></b-form-select>
                                         </b-form-group>
                             </b-col>
                         </b-row>
@@ -131,13 +138,18 @@
                             <b-col cols="6">
                                 <b-form-group>
                                     <label for="">Linea</label>
-                                    <b-form-select></b-form-select>
+                                    <b-form-select v-model="linea.opcion"
+                                        :options="linea.opciones"
+                                        @change="onChangeLinea($event)"
+                                    ></b-form-select>
                                 </b-form-group>
                             </b-col>
                             <b-col cols="6">
                                 <b-form-group>
                                     <label for="">Sublinea</label>
-                                    <b-form-select></b-form-select>
+                                    <b-form-select v-model="sublinea.opcion"
+                                        :options="sublinea.opciones"
+                                    ></b-form-select>
                                 </b-form-group>
                             </b-col>
                         </b-row>
@@ -306,7 +318,18 @@ export default {
             ip:process.env.VUE_APP_BASE_URL,
             lista:[],
             titulomodal:'Nuevo Producto',
-            imagen:require('@/assets/producto.png')
+            imagen:require('@/assets/producto.png'),
+            proveedor:{opciones:[],
+                opcion:null},
+            linea:{opciones:[],
+                opcion:null},
+            sublinea:{opciones:[],
+                opcion:null},
+            tipo:{opciones:[],
+                opcion:null},
+            condicion:{opciones:[],
+                opcion:null}                  
+
         }
     },
     methods:{
@@ -357,11 +380,205 @@ export default {
                     }
             })
 
-        }
+        },
+        listarProveedor(){
+            const direcion=this.ip+"/api/v1.0/Proveedor/"
+          
+            axios.get(direcion).
+            then(response =>{
+                const data=response.data
+                this.proveedor.opciones.length=0
+                data.forEach(key=>{
+                        var d={
+                        value: key.id,
+                        text: key.nombre
+                        }
+                    this.proveedor.opciones.push(d)
+                    
+                })
+                this.proveedor.opcion=this.proveedor.opciones[0].value
+            }).catch(error =>{
+               if(error.response){
+                    let mensaje=error.response.response
+                    this.$toasted.error('Error:'+mensaje, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                }else{
+                    this.$toasted.error('Error:'+error, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                }
+            })//termina axios
+        },
+        listarLinea(){
+             const url=this.ip+"/api/v1.0/Linea/"
+            axios.get(url).
+            then(response =>{ 
+                var datos=response.data
+                this.opcion=0
+                this.linea.opciones.length=0
+                datos.forEach(res=>{
+                    if(res.activo===true){
+                        var d={
+                        value: res.id,
+                        text: res.linea
+                        }
+                    this.linea.opciones.push(d)
+                    }
+                    
+                })
+                this.linea.opcion=this.linea.opciones[0].value
+                this.listarSublinea()
+            }).catch(error =>{
+                if(error.response){
+                    let mensaje=error.response.response
+                    this.$toasted.error('Error:'+mensaje, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                }else{
+                    this.$toasted.error('Error:'+error, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                }
+            })
+        }, //termina listarlinea
+        listarSublinea(opcion){
+            var id=opcion
+            if(id==null){
+                id=this.linea.opcion
+            }
+            this.linea.opcion=id
+            const url=this.ip+"/api/v1.0/Sublinea/"+id+"/ListarId/"
+            axios.get(url).
+            then(response => {
+                const data=response.data.response
+                if(data.length >0){
+                this.sublinea.opciones.length=0
+                data.forEach(key=>{
+                    var d={
+                        text:key.sublinea,
+                        value:key.id
+                    }
+                    this.sublinea.opciones.push(d)
+                })
+                this.sublinea.opcion=this.sublinea.opciones[0].value
+                }else{
+                    this.sublinea.opciones.length=0
+                     this.sublinea.opcion=null
+                }
+            }).catch(error=>{
+                if(error.response){
+                     
+                    this.$toasted.error('Error:'+error.response.data.response, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                }else{
+                    this.$toasted.error('Error:'+error, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                }
+            })
+        },//termina listarsublinea
+        onChangeLinea(event){
+           
+            this.listarSublinea(event)
+        },//se ejecuta cuando hay un cambio en el select linea
+        listarTipoproducto(){
+            const url=this.ip+"/api/v1.0/tipoproducto/"
+            axios.get(url).then(response=>{
+                var data=response.data
+                if(data.error>0){
+                    this.$toasted.error('Error: algo ocurrio', {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                }else{
+                    if(data.response.length>0){
+                        this.tipo.opciones.length=0
+                        data.response.forEach(key=>{
+                            var d={
+                                value:key.id,
+                                text:key.tipo_producto
+                            }
+                            this.tipo.opciones.push(d)
+                        })
+                        this.tipo.opcion=this.tipo.opciones[0].value
+                    }
+                }
 
+
+            }).catch(error=>{
+                 if(error.response){
+                     
+                    this.$toasted.error('Error:'+error.response.data.response, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                }else{
+                    this.$toasted.error('Error:'+error, {
+                                            position: 'top-center',
+                                            action: {
+                                            text: 'cerrar',
+                                            onClick: (e, toastObject) => {
+                                                toastObject.goAway(0);
+                                            }
+                                            }
+                                        })
+                }
+            })
+        }
     },
     mounted(){
         this.listarInventario()
+        this.listarProveedor()
+        this.listarLinea()
+        this.listarTipoproducto()
     }
 }
 </script>

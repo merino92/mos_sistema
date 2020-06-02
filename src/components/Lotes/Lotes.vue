@@ -32,10 +32,28 @@
                 </b-col>
             </b-row>
             <b-row>
-                <b-col cols="12">
+                <b-col cols="4">
                     <b-form-group>
                          <label for="">Fecha de Fabricacion</label>
-                       <date-picker></date-picker>
+                        <b-form-datepicker id="example-datepicker" class="mb-2" 
+                            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                            locale="es"
+                        ></b-form-datepicker>
+                    </b-form-group>
+                </b-col>
+                <b-col cols="4">
+                    <b-form-group>
+                         <label for="">Fecha de Vencimiento</label>
+                        <b-form-datepicker id="example-datepicker1" class="mb-2"
+                            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                            locale="es"
+                        ></b-form-datepicker>
+                    </b-form-group>
+                </b-col>
+                <b-col cols="2">
+                    <b-form-group>
+                        <label for=""></label>
+                        <b-button variant="success">Agregar</b-button>
                     </b-form-group>
                 </b-col>
             
