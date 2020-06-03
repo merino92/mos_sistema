@@ -36,7 +36,7 @@
                             </b-col>
                             <b-col cols="6">
                                 <label for="">Tipo de Contribuyente</label>
-                                <b-form-select v-model="opcion"
+                                <b-form-select v-model="formulario.opcion"
                                 :options="opciones"
                                 ></b-form-select>
                             </b-col>

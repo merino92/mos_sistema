@@ -58,8 +58,8 @@
                                          <tr v-for="datos in this.lista" :key="datos.id" >
                                                 <td>{{datos.codigo_producto}}</td>
                                                 <td>{{datos.nombre}}</td>
-                                                <td>{{datos.cmaxima+' | '+datos.cminima}}</td>
-                                                <td>{{"$"+datos.cmaxima+' | '+'$'+datos.cminima}}</td>
+                                                <td>{{datos.cunidades+' | '+datos.cfraccion}}</td>
+                                                <td>{{"$"+parseFloat(datos.preciou).toFixed(2)+' | '+'$'+parseFloat(datos.preciof).toFixed(2)}}</td>
                                                 <td>
                                                     <b-button  class='btn btn-info btn-sm ' @click="mostrarDatos(datos.id),bloqueado=1,nuevo=false,edicion=false">
                                                     <span class="glyphicon icono glyphicon-zoom-in"></span>
@@ -91,7 +91,7 @@
                                     <b-col cols="8">
                                         <b-form-group>
                                         <label for="">Codigo</label>
-                                         <b-form-input placeholder="Codigo"></b-form-input>
+                                         <b-form-input v-model="producto.codigo_producto" placeholder="Codigo"></b-form-input>
                                         </b-form-group>
                                        
                                     </b-col>
@@ -100,7 +100,7 @@
                                     <b-col cols="12">
                                         <b-form-group>
                                             <label for="">Nombre del Producto</label>
-                                            <b-form-input placeholder="Descripcion"></b-form-input>
+                                            <b-form-input v-model="producto.nombre" placeholder="Descripcion"></b-form-input>
                                         </b-form-group>
                                     </b-col>
                                 </b-row>
@@ -328,14 +328,37 @@ export default {
             tipo:{opciones:[],
                 opcion:null},
             condicion:{opciones:[],
-                opcion:null}                  
+                opcion:null},
+            producto:{nombre:'',
+                        codigo_producto:'',
+                        n_unidad:'',
+                        n_fraccion:'',
+                        equivalente_unidad:0,
+                        ubicacion:'',
+                        cmaxima:'',
+                        cminima:'',
+                        mdescuento:0,
+                        cunidades:0,
+                        cfraccion:0,
+                        costou:0.00,
+                        costof:0.00,
+                        preciou:0.00,
+                        preciof:0.00,
+                        opciones:null,
+                        borrado:false,
+                        idlinea:0,
+                        idsublinea:0,
+                        idproveedor:0,
+                        idcondicionproducto:0,
+                        idtipoproducto:0,
+                    }                      
 
         }
     },
     methods:{
 
         listarInventario(){
-            const url=this.ip+"/api/v1.0/producto/"
+            const url=this.ip+"/api/v1.0/inventario/"
             axios.get(url).then(
                 response=>{
                     const re=response.data
