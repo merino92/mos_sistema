@@ -49,7 +49,7 @@
             index="inventario"
             :childrenLinks="[
               { header: 'Inventario', link: '/inventario/inventario' },
-              { header: 'Kardex', link: '/app/components/icons' },
+              { header: 'Kardex', link: '/inventario/kardex'},
               { header: 'Ajuste Inventario', link: '/app/components/maps' },
             ]"
         />

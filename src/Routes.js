@@ -28,6 +28,7 @@ import Sublinea from '@/pages/Sublineas/Sublineas';
 import General from '@/pages/General/General';
 import Impuestos from '@/pages/Impuestos/Impuestos';
 import Inventario from '@/pages/Inventario/Inventario';
+import Kardex from '@/pages/Kardex/Kardex'
 Vue.use(Router);
 
 export default new Router({
@@ -132,6 +133,10 @@ export default new Router({
           path:'inventario',
           name:'Inventario',
           component:Inventario
+        },
+        { path:'kardex',
+          name:'Kardex',
+          component:Kardex
         }
       ]
     }
