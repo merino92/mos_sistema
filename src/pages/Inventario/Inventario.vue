@@ -12,7 +12,7 @@
                 >
                  <b-row>
                     <b-col cols="12">
-                        <b-button class="btn btn-success float-right" @click="$bvModal.show('modal')"
+                        <b-button class="btn btn-success float-right" @click="$bvModal.show('modal'),precios_lotes=true"
                         
                         >
                     <span class="glyphicon icono glyphicon-plus"></span>
@@ -61,10 +61,10 @@
                                                 <td>{{datos.cunidades+' | '+datos.cfraccion}}</td>
                                                 <td>{{"$"+parseFloat(datos.preciou).toFixed(2)+' | '+'$'+parseFloat(datos.preciof).toFixed(2)}}</td>
                                                 <td>
-                                                    <b-button  class='btn btn-info btn-sm ' @click="mostrarProducto(datos.id),bloqueado=true,nuevo=false,edicion=false">
+                                                    <b-button  class='btn btn-info btn-sm ' @click="mostrarProducto(datos.id),bloqueado=true,precios_lotes=false">
                                                     <span class="glyphicon icono glyphicon-zoom-in"></span>
                                                     </b-button>    
-                                                    <b-button  class='btn btn-warning btn-sm ml-1' @click="mostrarDatos(datos.id),bloqueado=0,nuevo=false,edicion=true">
+                                                    <b-button  class='btn btn-warning btn-sm ml-1' @click="mostrarProducto(datos.id),bloqueado=false,precios_lotes=false">
                                                     <span class="glyphicon icono glyphicon-pencil"></span></b-button>
                                                     <b-button type="button" class="btn btn-danger btn-sm ml-1" @click="modalEliminar(datos.id)" >
                                                     <span class="glyphicon icono glyphicon-trash"></span></b-button>   
@@ -113,7 +113,9 @@
                                     <b-col cols="12">
                                         <b-form-group>
                                             <label for="">Nombre del Producto</label>
-                                            <b-form-input v-model="producto.nombre" placeholder="Descripcion"></b-form-input>
+                                            <b-form-input v-model="producto.nombre"
+                                                :disabled="bloqueado"
+                                             placeholder="Descripcion"></b-form-input>
                                         </b-form-group>
                                     </b-col>
                                 </b-row>
@@ -122,6 +124,7 @@
                                         <b-form-group>
                                             <label for="">Proveedor</label>
                                             <b-form-select 
+                                            :disabled="bloqueado"
                                                 v-model="proveedor.opcion"
                                                 :options="proveedor.opciones"
                                              ></b-form-select>
@@ -134,13 +137,16 @@
                             <b-col cols="6">
                                 <b-form-group>
                                     <label for="">Ubicacion</label>
-                                    <b-form-input v-model="producto.ubicacion" placeholder="Ubicacion" ></b-form-input>
+                                    <b-form-input v-model="producto.ubicacion" 
+                                    :disabled="bloqueado"
+                                    placeholder="Ubicacion" ></b-form-input>
                                 </b-form-group>
                             </b-col>
                             <b-col cols="6">
                                 <b-form-group>
                                             <label for="">Tipo de producto</label>
                                             <b-form-select
+                                            :disabled="bloqueado"
                                                 v-model="tipo.opcion"
                                                 :options="tipo.opciones"
                                              ></b-form-select>
@@ -152,6 +158,7 @@
                                 <b-form-group>
                                     <label for="">Linea</label>
                                     <b-form-select v-model="linea.opcion"
+                                        :disabled="bloqueado"
                                         :options="linea.opciones"
                                         @change="onChangeLinea($event)"
                                     ></b-form-select>
@@ -161,6 +168,7 @@
                                 <b-form-group>
                                     <label for="">Sublinea</label>
                                     <b-form-select v-model="sublinea.opcion"
+                                        :disabled="bloqueado"
                                         :options="sublinea.opciones"
                                     ></b-form-select>
                                 </b-form-group>
@@ -171,6 +179,7 @@
                                 <b-form-group>
                                     <label for="">Condicion</label>
                                     <b-form-select v-model="condicion.opcion"
+                                    :disabled="bloqueado"
                                         :options="condicion.opciones"
                                     ></b-form-select>
                                 </b-form-group>
@@ -182,25 +191,33 @@
                             <b-col cols="3">
                                 <b-form-group>
                                     <label for="">Cant. Maxima</label>
-                                    <b-form-input v-model="producto.cmaxima" type="number"></b-form-input>
+                                    <b-form-input class="numero" v-model="producto.cmaxima" 
+                                        :disabled="bloqueado"
+                                     type="number"></b-form-input>
                                 </b-form-group>
                             </b-col>
                             <b-col cols="3">
                                  <b-form-group>
                                     <label for="">Cant. Minima</label>
-                                    <b-form-input v-model="producto.cminima" type="number"></b-form-input>
+                                    <b-form-input class="numero" v-model="producto.cminima" 
+                                    :disabled="bloqueado"
+                                    type="number"></b-form-input>
                                 </b-form-group>
                             </b-col>
                             <b-col cols="3">
                                 <b-form-group>
                                     <label for="">Exist. Unidad</label>
-                                    <b-form-input v-model="producto.cunidades" type="number"></b-form-input>
+                                    <b-form-input class="numero" v-model="producto.cunidades" 
+                                    :disabled="bloqueado"
+                                    type="number"></b-form-input>
                                 </b-form-group>
                             </b-col>
                             <b-col cols="3">
                                 <b-form-group>
                                     <label for="">Exist. Fraccion</label>
-                                    <b-form-input v-model="producto.cfraccion" type="number"></b-form-input>
+                                    <b-form-input class="numero" v-model="producto.cfraccion"
+                                    :disabled="bloqueado"
+                                     type="number"></b-form-input>
                                 </b-form-group>
                             </b-col>
                         </b-row>
@@ -210,17 +227,23 @@
                             <b-col cols="6">
                                 <b-form-group>
                                     <label for="">Nombre Unidad</label>
-                                    <b-form-input placeholder="Nombre" ></b-form-input>
+                                    <b-form-input v-model="producto.n_unidad" 
+                                        :disabled="bloqueado"
+                                     placeholder="Nombre" ></b-form-input>
                                 </b-form-group>
                                 <b-form-group>
                                     <label for="">Nombre Fraccion</label>
-                                    <b-form-input placeholder="Nombre" ></b-form-input>
+                                    <b-form-input v-model="producto.n_fraccion"
+                                        :disabled="bloqueado"
+                                     placeholder="Nombre" ></b-form-input>
                                 </b-form-group>
                                 <b-row>
                                     <b-col cols="6">
                                         <b-form-group>
                                     <label for="">Equivalente Unidad</label>
-                                    <b-form-input type="number" placeholder="0" 
+                                    <b-form-input type="number" class="numero"
+                                    v-model="producto.equivalente_unidad" placeholder="0" 
+                                    :disabled="bloqueado"
                                         v-b-tooltip.hover title="Cuantas fracciones se divide una unidad"
                                     ></b-form-input>
                                 </b-form-group>
@@ -229,7 +252,9 @@
                                         <b-form-group>
                                             <label for="">Descuento Maximo</label>
                                             <b-input-group append="%">
-                                            <b-form-input  type="number" v-b-tooltip.hover title="Porcentaje maximo de descuento que se le puede dar al producto"></b-form-input>
+                                            <b-form-input  v-model="producto.mdescuento" class="numero"
+                                            :disabled="bloqueado"
+                                            type="number" v-b-tooltip.hover title="Porcentaje maximo de descuento que se le puede dar al producto"></b-form-input>
                                             </b-input-group>  
                                              </b-form-group>
                                     </b-col>
@@ -243,16 +268,23 @@
                                             <b-row>
                                                 <b-col cols="6">
                                                     <b-input-group prepend="$"
+
                                                         v-b-tooltip.hover title="Costo promedio sin IVA"
+                                                       
                                                     >    
-                                                        <b-form-input  type="number"></b-form-input>
+                                                        <b-form-input class="numero"
+                                                        :disabled="bloqueado"
+                                                         v-model="producto.costou"
+                                                         type="number"></b-form-input>
                                                     </b-input-group>  
                                                 </b-col>
                                                 <b-col cols="6">
                                                     <b-input-group prepend="$"
                                                         v-b-tooltip.hover title="Costo promedio con IVA"
                                                     >
-                                                        <b-form-input  type="number"></b-form-input>
+                                                        <b-form-input   class="numero"
+                                                        :disabled="bloqueado"
+                                                        v-model="producto.costouiva"  type="number"></b-form-input>
                                                     </b-input-group>
                                                 </b-col>
                                             </b-row>
@@ -268,14 +300,18 @@
                                                     <b-input-group prepend="$"
                                                         v-b-tooltip.hover title=""
                                                     >    
-                                                        <b-form-input  type="number"></b-form-input>
+                                                        <b-form-input  v-model="producto.preciou" class="numero"
+                                                        :disabled="bloqueado"
+                                                        type="number"></b-form-input>
                                                     </b-input-group>  
                                                 </b-col>
                                                 <b-col cols="6">
                                                     <b-input-group prepend="$"
                                                         v-b-tooltip.hover title=""
                                                     >
-                                                        <b-form-input  type="number"></b-form-input>
+                                                        <b-form-input v-model="producto.preciouiva" class="numero"
+                                                            :disabled="bloqueado"
+                                                         type="number"></b-form-input>
                                                     </b-input-group>
                                                 </b-col>
                                             </b-row>
@@ -291,14 +327,18 @@
                                                     <b-input-group prepend="$"
                                                         v-b-tooltip.hover title=""
                                                     >    
-                                                        <b-form-input  type="number"></b-form-input>
+                                                        <b-form-input v-model="producto.preciof" 
+                                                        :disabled="bloqueado" class="numero"
+                                                         type="number"></b-form-input>
                                                     </b-input-group>  
                                                 </b-col>
                                                 <b-col cols="6">
                                                     <b-input-group prepend="$"
                                                         v-b-tooltip.hover title=""
                                                     >
-                                                        <b-form-input  type="number"></b-form-input>
+                                                        <b-form-input v-model="producto.preciofiva" 
+                                                        :disabled="bloqueado" class="numero"
+                                                        type="number"></b-form-input>
                                                     </b-input-group>
                                                 </b-col>
                                             </b-row>
@@ -308,10 +348,12 @@
                             </b-col>
                         </b-row>
                     </b-tab>
-                    <b-tab title="Precios Unidades" >
-                        <Unidades></Unidades>
+                    <b-tab title="Precios Unidades" :disabled="precios_lotes" >
+                        <Unidades :visible="bloqueado" :idinventario="producto.id"   ></Unidades>
                     </b-tab>
-                    <b-tab title="Lotes" ><Lotes></Lotes></b-tab>
+                    <b-tab title="Lotes" :disabled="precios_lotes" >
+                        <Lotes></Lotes>
+                    </b-tab>
                 </b-tabs>
             </div>
         </b-modal>
@@ -332,6 +374,10 @@ export default {
         return{
             ip:process.env.VUE_APP_BASE_URL,
             lista:[],
+            impuestos:{iva:0,
+                cesc:0,
+                retencion:0,
+                cotram:0},
             titulomodal:'Nuevo Producto',
             fileimagen:null,
             imagen:require('@/assets/producto.png'),
@@ -347,7 +393,8 @@ export default {
                 opcion:null},
             busqueda:{codigo:'',
                     descripcion:''},    
-            producto:{nombre:'',
+            producto:{  id:0,
+                        nombre:'',
                         codigo_producto:'',
                         n_unidad:'',
                         n_fraccion:'',
@@ -359,9 +406,13 @@ export default {
                         cunidades:0,
                         cfraccion:0,
                         costou:0.00,
+                        costouiva:0.00,
                         costof:0.00,
+                        costofiva:0.00,
                         preciou:0.00,
+                        preciouiva:0.00,
                         preciof:0.00,
+                        preciofiva:0.00,
                         opciones:null,
                         borrado:false,
                         idlinea:0,
@@ -370,11 +421,15 @@ export default {
                         idcondicionproducto:0,
                         idtipoproducto:0,
                     },
-            bloqueado:false                              
+            bloqueado:false,
+            precios_lotes:false                              
 
         }
     },
     methods:{
+        listarImpuestos(){
+            //const url = this.ip +'/api/v1.0/Configuracion/1/ListarImpuestos/'
+        },//lista los impuestos
         listarInventario(){
             const url=this.ip+"/api/v1.0/inventario/"
             axios.get(url).then(
@@ -729,7 +784,9 @@ export default {
                 }else{
                     
                     // eslint-disable-next-line no-console
+                    console.log(datos.response[0])
                     const producto = datos.response[0]
+                    this.producto.id = id
                     this.producto.nombre = producto.nombre
                     this.producto.codigo_producto = producto.codigo_producto
                     this.proveedor.opcion=producto.idproveedor
@@ -738,11 +795,21 @@ export default {
                     this.linea.opcion= producto.idlinea
                     this.listarSublinea(producto.idlinea,producto.idsublinea)
                     this.condicion.opcion = producto.idcondicionproducto
-                    this.tipo.opcion = producto.idtipoproducto
+                    this.tipo.opcion = producto.idtiproducto
                     this.producto.cmaxima = producto.cmaxima
                     this.producto.cminima =producto.cminima
                     this.producto.cunidades =producto.cunidades
                     this.producto.cfraccion =producto.cfraccion
+                    this.producto.n_unidad = producto.n_unidad
+                    this.producto.n_fraccion =producto.n_fraccion
+                    this.producto.equivalente_unidad = producto.equivalente_unidad
+                    this.producto.mdescuento = parseFloat(producto.mdescuento).toFixed(1)
+                    this.producto.costouiva = parseFloat(producto.costou).toFixed(2)
+                    this.producto.costou = parseFloat(parseFloat(producto.costou).toFixed(2)/ 1.13).toFixed(2) 
+                    this.producto.preciouiva = parseFloat(producto.preciou).toFixed(2)
+                    this.producto.preciou =parseFloat(parseFloat(producto.preciou).toFixed(2)/1.13).toFixed(2)
+                    this.producto.preciofiva = parseFloat(producto.preciof).toFixed(2)
+                    this.producto.preciof = parseFloat(parseFloat(producto.preciof).toFixed(2)/1.13).toFixed(2)
                     this.$bvModal.show('modal')
                 }   
             }).catch(error => {
@@ -761,6 +828,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .numero{
+        font-weight: bold;
+    }
     .icono {
      vertical-align: top !important; 
     }
