@@ -18,7 +18,7 @@
                 <Widget title="<h5>I<span class='fw-semi-bold'>va</span></h5> "
                  customHeader>
                     <b-row class="mt-2">
-                        <b-col cols="8" sm="12">
+                        <b-col cols="8"  md="8" sm="8">
                             <b-form-group>
                             <b-input-group append="%">
                                 <b-form-input :state="formState.iva" v-model="impuestos.iva" type="number"></b-form-input>
@@ -34,7 +34,7 @@
                  customHeader
                  >
                      <b-row class="mt-2">
-                         <b-col cols="8" sm="12">
+                         <b-col cols="8"  md="8" sm="8">
                              <b-form-group>
                                
                                 <b-input-group append="%">
@@ -51,7 +51,7 @@
                  customHeader
                  >
                      <b-row class="mt-2">
-                         <b-col cols="8" sm="12">
+                         <b-col cols="8"  md="8" sm="8">
                             <b-form-group>
                                
                                 <b-input-group append="%">
@@ -68,7 +68,7 @@
                  customHeader
                  >
                      <b-row class="mt-2">
-                         <b-col cols="8" sm="12">
+                         <b-col cols="8"  md="8" sm="8">
                             <b-form-group>
                                 <b-input-group append="%">
                                     <b-form-input :state="formState.cotram" v-model="impuestos.cotram" type="number"></b-form-input>

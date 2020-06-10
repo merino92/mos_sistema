@@ -130,8 +130,8 @@ export default new Router({
       component:Layout,
       children:[
         {
-          path:'inventario',
-          name:'Inventario',
+          path:'producto',
+          name:'Producto',
           component:Inventario
         },
         { path:'kardex',

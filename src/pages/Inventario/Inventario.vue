@@ -12,7 +12,7 @@
                 >
                  <b-row>
                     <b-col cols="12">
-                        <b-button class="btn btn-success float-right" @click="$bvModal.show('modal'),precios_lotes=true"
+                        <b-button class="btn btn-success float-right" @click="limpiar(),$bvModal.show('modal'),precios_lotes=true"
                         
                         >
                     <span class="glyphicon icono glyphicon-plus"></span>
@@ -428,7 +428,28 @@ export default {
     },
     methods:{
         listarImpuestos(){
-            //const url = this.ip +'/api/v1.0/Configuracion/1/ListarImpuestos/'
+            const url = this.ip +'/api/v1.0/Configuracion/1/ListarImpuestos/'
+            axios.get(url)
+            .then(response =>{
+                const data = response.data
+                if(data.error > 0){
+                    this.errorAlert(data.response)
+                }else{
+                    var impuesto =data.response
+                    this.impuestos.iva = (parseInt(impuesto.iva)/100) + 1 
+                    this.impuestos.retencion = (parseInt(impuesto.retencion)/100)
+                    this.impuestos.cesc =(parseInt(impuesto.cesc)/100)
+                    this.impuestos.cotram =(parseInt(impuesto.cotram) /100)
+                }
+
+            }).catch(error =>{
+                if(error.response){
+                    var datos = error.response
+                    this.errorAlert(datos.response)
+                }else{
+                    this.errorAlert(error)
+                }
+            })
         },//lista los impuestos
         listarInventario(){
             const url=this.ip+"/api/v1.0/inventario/"
@@ -805,16 +826,41 @@ export default {
                     this.producto.equivalente_unidad = producto.equivalente_unidad
                     this.producto.mdescuento = parseFloat(producto.mdescuento).toFixed(1)
                     this.producto.costouiva = parseFloat(producto.costou).toFixed(2)
-                    this.producto.costou = parseFloat(parseFloat(producto.costou).toFixed(2)/ 1.13).toFixed(2) 
+                    this.producto.costou = parseFloat(parseFloat(producto.costou).toFixed(2)/ this.impuestos.iva).toFixed(2) 
                     this.producto.preciouiva = parseFloat(producto.preciou).toFixed(2)
-                    this.producto.preciou =parseFloat(parseFloat(producto.preciou).toFixed(2)/1.13).toFixed(2)
+                    this.producto.preciou =parseFloat(parseFloat(producto.preciou).toFixed(2)/this.impuestos.iva).toFixed(2)
                     this.producto.preciofiva = parseFloat(producto.preciof).toFixed(2)
-                    this.producto.preciof = parseFloat(parseFloat(producto.preciof).toFixed(2)/1.13).toFixed(2)
+                    this.producto.preciof = parseFloat(parseFloat(producto.preciof).toFixed(2)/this.impuestos.iva).toFixed(2)
                     this.$bvModal.show('modal')
                 }   
             }).catch(error => {
                 this.mensajeAlerta(error)
             })
+        },
+        limpiar(){
+                    this.producto.id = 0
+                    this.producto.nombre = ""
+                    this.producto.codigo_producto = ""
+                    this.proveedor.opcion= this.proveedor.opciones[0].value
+                    this.producto.ubicacion = "" 
+                    this.linea.opcion= this.linea.opciones[0].value
+                    this.listarSublinea(this.linea.opcion,0)
+                    this.condicion.opcion = this.condicion.opciones[0].value
+                    this.tipo.opcion = this.tipo.opciones[0].value
+                    this.producto.cmaxima = 0
+                    this.producto.cminima = 0
+                    this.producto.cunidades = null
+                    this.producto.cfraccion = null
+                    this.producto.n_unidad = null
+                    this.producto.n_fraccion =null
+                    this.producto.equivalente_unidad = null
+                    this.producto.mdescuento = null
+                    this.producto.costouiva = null
+                    this.producto.costou = null
+                    this.producto.preciouiva = null
+                    this.producto.preciou = null
+                    this.producto.preciofiva = null
+                    this.producto.preciof = null
         }
     },
     mounted(){
@@ -823,6 +869,7 @@ export default {
         this.listarLinea()
         this.listarTipoproducto()
         this.listarCondicionProducto()
+        this.listarImpuestos()
     }
 }
 </script>
