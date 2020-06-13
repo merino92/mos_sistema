@@ -36,6 +36,7 @@
                     <b-form-group>
                          <label for="">Fecha de Fabricacion</label>
                         <b-form-datepicker id="example-datepicker" class="mb-2" 
+                            v-model="fechaFabricacion"
                             :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
                             locale="es"
                         ></b-form-datepicker>
@@ -45,6 +46,7 @@
                     <b-form-group>
                          <label for="">Fecha de Vencimiento</label>
                         <b-form-datepicker id="example-datepicker1" class="mb-2"
+                            v-model="fechaVencimiento"
                             :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
                             locale="es"
                         ></b-form-datepicker>
@@ -59,14 +61,88 @@
             
             </b-row>
        </b-collapse>
+       <b-row>
+           <b-col>
+               <b-table responsive small :fields="tabla.fields" :items="tabla.items" >
+
+               </b-table>
+           </b-col>
+       </b-row>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     name:'lote',
+    props:{
+        idinventario:{
+        type:Number,
+        defaultValue:0
+        },
+        visible:{
+            type:Boolean,
+            defaultValue:false
+        }
+    }, //propiedades que recibe del componente padre
     data(){
-        return{}
+        return{
+            ip:process.env.VUE_APP_BASE_URL,
+            fechaFabricacion: new Date(),
+            fechaVencimiento: new Date(),
+            tabla:{fields:[{key:'id',label:'#'},{key:'nlote',label:'Lote'},{key:'ffabricacion',label:'Fabricacion'},
+                            {key:'fvencimiento',label:'Vencimiento'},
+                        {key:'cunidades',label:'Unidad'},{key:'cfracion',label:'Fraccion'},'Opciones'],
+                    items:[]},
+            formulario:{
+                fechaf:null,
+                fechav:null,
+                numlote:'',
+                unidad:0,
+                fraccion:0,
+            }        
+        }
+    },
+    watch:{
+        idinventario: data =>{
+            this.idinventario = data 
+
+        },
+        visible: data =>{
+            this.visible = data 
+        }
+    }, //acciones en caso que cvambie los valores de las variables dque vienen del padre
+    methods:{
+        listarLotes(){
+            const url = this.ip + '/api/v1.0/lotes/'+this.idinventario+'/'
+            axios.get(url)
+            .then(response =>{
+                var datos = response.data
+                if(datos.error > 0 ){
+                    this.errorAlert(datos.response)
+                }else{
+                    var lotes = datos.response
+                    this.tabla.items.length = 0 //limpiamos el array
+                    lotes.forEach( key => {
+                        var item ={
+                            value:key.id 
+                            
+                        }
+                    })
+                }
+
+            }).catch(error=>{
+                if(error.response){
+                    var mensaje = error.response.data.response
+                    this.errorAlert(mensaje)
+                }else{
+                    this.errorAlert(error)
+                }
+            })
+
+        }
+
+
     }
 }
 </script>

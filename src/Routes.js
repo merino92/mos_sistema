@@ -29,6 +29,7 @@ import General from '@/pages/General/General';
 import Impuestos from '@/pages/Impuestos/Impuestos';
 import Inventario from '@/pages/Inventario/Inventario';
 import Kardex from '@/pages/Kardex/Kardex'
+import Compras from '@/pages/Compras/Compras'
 Vue.use(Router);
 
 export default new Router({
@@ -90,6 +91,11 @@ export default new Router({
       name:'Compras',
       component:Layout,
       children:[
+        {
+          path:'general',
+          name:'Compra',
+          component:Compras
+        },
         {
           path:'compra/proveedor',
           name:'Proveedor',

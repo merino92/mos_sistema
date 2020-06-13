@@ -6,7 +6,17 @@
         @mouseleave="sidebarMouseLeave"
     >
       <header class="logo">
-        <router-link to="/app"><span class="primary-word">Artemisa</span></router-link>
+        <router-link to="/app/dashboard">
+       
+         <span class="primary-word">
+         
+        <b-img :src="require('@/assets/Artemisa.png')" class="img" >
+        </b-img>
+           
+               Artemisa</span>
+      
+        
+        </router-link>
       </header>
       <ul class="nav">
         <NavLink
@@ -24,7 +34,7 @@
             iconName="fa fa-truck"
             index="compras"
             :childrenLinks="[
-              { header: 'Compras', link: '/compras/compra/compras' },
+              { header: 'Compras', link: '/compras/general' },
               { header: 'Proveedores', link: '/compras/compra/proveedor' },
               { header: 'Lineas', link: '/compras/compra/linea' },
               { header: 'Sublineas', link: '/compras/compra/sublinea' },

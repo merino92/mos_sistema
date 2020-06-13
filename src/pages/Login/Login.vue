@@ -1,17 +1,13 @@
 <template>
   <div class="auth-page">
     <b-container>
-      <h5 class="auth-logo">
-        <i class="fa fa-circle text-primary"></i>
-          ARTEMISA
-        <i class="fa fa-circle text-danger"></i>
-      </h5>
+     
       <Widget class="widget-auth mx-auto hola" title="" customHeader>
-        <h3 class='mt-0 title'>Ingresa a la App</h3>
-        <p class="widget-auth-info">
+           <b-img :src="this.image" fluid alt="Fluid image"></b-img>
+        <p class="widget-auth-info mt-2">
             Usa tu usuario y clave para acceder
         </p>
-        <form class="mt" @submit.prevent="login">
+        <form class="mt mt-5" @submit.prevent="login">
           <b-alert class="alert-sm" variant="danger" :show="!!errorMessage">
             {{errorMessage}}
           </b-alert>
@@ -45,6 +41,7 @@ export default {
   data() {
     return {
       errorMessage: null,
+      image:require('@/assets/logo.png'),
     };
   },
   methods: {
