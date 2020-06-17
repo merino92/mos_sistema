@@ -33,6 +33,7 @@ import Compras from '@/pages/Compras/Compras'
 Vue.use(Router);
 
 export default new Router({
+  mode:'history',
   routes: [
     {
       path: '/login',
@@ -147,4 +148,4 @@ export default new Router({
       ]
     }
   ],
-});
+})

@@ -12,10 +12,10 @@
             {{errorMessage}}
           </b-alert>
           <div class="form-group">
-            <input class="form-control no-border" ref="email" required type="text" name="email" placeholder="Usuario" />
+            <input class="form-control no-border" v-model="usuario" ref="text" required type="text" name="email" placeholder="Usuario" />
           </div>
           <div class="form-group">
-            <input class="form-control md no-border" ref="password" required type="password" name="password" placeholder="Password" />
+            <input class="form-control md no-border" ref="password" v-model="pass" required type="password" name="password" placeholder="Password" />
           </div>
           <b-button type="submit" size="md" class="auth-btn  mb-3" variant="success">Ingresar</b-button>   
           <b-col class="mb-5"></b-col> 
@@ -42,16 +42,20 @@ export default {
     return {
       errorMessage: null,
       image:require('@/assets/logo.png'),
+      usuario:'',
+      pass:''
     };
   },
   methods: {
     login() {
-      const email = this.$refs.email.value;
-      const password = this.$refs.password.value;
+      const email = this.usuario
+      const password = this.pass
 
       if (email.length !== 0 && password.length !== 0) {
-        window.localStorage.setItem('authenticated', true);
-        this.$router.push('/app/dashboard');
+        window.localStorage.setItem('authenticated', true)
+        this.$router.push('/app/dashboard')
+      }else{
+        this.errorAlert('Usuario o clave invalido')
       }
     },
   },

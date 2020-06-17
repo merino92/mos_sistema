@@ -22,7 +22,7 @@
                         
                         
                     </div>
-                    <div class="row ">
+                <!---    <div class="row ">
                         <div class="col-xs-12 col-md-7 col-lg-7">
                             <div class="form-group">
                                 <input type="text" class="form-control md" placeholder="Buscar Proveedor" id="buscar">
@@ -34,7 +34,7 @@
                         <div class="col-xs-4 col-md-3 col-lg-3">
                            
                         </div>
-                    </div>
+                    </div> ---->
 
                     <div class="row mt-2">
                             <div class="col-xs-12 col-md-12 col-lg-12">

@@ -20,15 +20,17 @@
                                         </b-input-group-text>
                                         
                                     </template>
-                                    <b-form-input placeholder="Codigo" type="text"></b-form-input>
+                                    <b-form-input placeholder="Codigo" v-on:keyup.enter="filtrarProducto()" v-model="busqueda.codigo" type="text"></b-form-input>
                                 </b-input-group>  
                             </b-form-group>
                     </b-col>
                     <b-col cols="6">
-                        <b-form-input type="text" placeholder="Descripcion del Producto"></b-form-input>
+                        <b-form-input type="text" v-model="busqueda.descripcion" 
+                        v-on:keyup.enter="filtrarProducto()"
+                        placeholder="Descripcion del Producto"></b-form-input>
                     </b-col>
                     <b-col cols="2">
-                        <b-button class="btn btn-info">Buscar</b-button>
+                        <b-button class="btn btn-info" @click="filtrarProducto()">Buscar</b-button>
                     </b-col>
                 </b-row>
                 <b-row>
@@ -175,8 +177,8 @@ export default {
             fechai:moment(this.fahora).format('YYYY-MM-DD'),
             fechaf:moment(this.fahora).format('YYYY-MM-DD'),
             id:0,
-            codigo:'',
-            descripcion:'',
+            busqueda:{codigo:'',
+                    descripcion:''},
             tabla:{fields:[{key:'nid',label:'#'},{key:'fecha'},{key:'documento'},{key:'usuario',label:'Usuario'},
                         {key:'uentrada',label:'U'},{key:'fentrada',label:'F'},{key:'usalida',label:'U'},
                         {key:'fsalida',label:'F'},{key:'saldou',label:'U'},{key:'saldof',label:'F'}],
@@ -381,6 +383,35 @@ export default {
                 }
             })
         
+        },
+        filtrarProducto(){
+             if (this.busqueda.codigo.length <= 0 && this.busqueda.descripcion.length <= 0){
+                this.listarInventario()
+            }else{
+                const url = this.ip + "/api/v1.0/inventario/busqueda/"
+                var datos={
+                    codigo:this.busqueda.codigo.toUpperCase(),
+                    descripcion:this.busqueda.descripcion.toUpperCase()
+                } 
+                axios.post(url,datos).
+                then(response=>{
+                    if(response.data.error > 0){
+                        this.mensajeAlerta(response)
+                    }else{
+                        this.lista.length=0
+                        this.lista=response.data.response 
+                    }
+                }).catch(error =>{
+                    if(error.respose){
+                        const msg =error.response.data.response
+                        this.mensajeAlerta(msg)
+                    }else{
+                        this.mensajeAlerta(error)
+                    }
+                    
+                })
+
+            }
         }
 
 

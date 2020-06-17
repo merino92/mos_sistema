@@ -16,7 +16,8 @@
                 >
                  <b-row>
                     <b-col cols="12">
-                        <b-button class="btn btn-success float-right" @click="limpiar(),$bvModal.show('modal'),nuevo=true,edicion=false, precios_lotes=true,bloqueado=false"
+                        <b-button class="btn btn-success float-right" 
+                        @click="limpiar(),$bvModal.show('modal'),nuevo=true,edicion=false, precios_lotes=true,bloqueado=false"
                         
                         >
                     <span class="glyphicon icono glyphicon-plus"></span>
@@ -68,9 +69,10 @@
                                                     <b-button  class='btn btn-info btn-sm ' @click=" limpiar(),mostrarProducto(datos.id),nuevo=false,edicion=false,bloqueado=true,precios_lotes=false">
                                                     <span class="glyphicon icono glyphicon-zoom-in"></span>
                                                     </b-button>    
-                                                    <b-button  class='btn btn-warning btn-sm ml-1'  @click="limpiar(),mostrarProducto(datos.id),nuevo=false,edicion=true,bloqueado=false,precios_lotes=false">
+                                                    <b-button  class='btn btn-warning btn-sm ml-1'  
+                                                    @click="limpiar(),mostrarProducto(datos.id),nuevo=false,edicion=true,bloqueado=false,precios_lotes=false">
                                                     <span class="glyphicon icono glyphicon-pencil"></span></b-button>
-                                                    <b-button type="button" class="btn btn-danger btn-sm ml-1" @click="modalEliminar(datos.id)" >
+                                                    <b-button type="button" class="btn btn-danger btn-sm ml-1" @click="alertaEliminar(datos.id)" >
                                                     <span class="glyphicon icono glyphicon-trash"></span></b-button>   
                                                 </td>
                                             </tr>
@@ -364,13 +366,14 @@
                     <b-tab title="Precios Unidades" :disabled="precios_lotes" >
                         <Unidades :visible="bloqueado" :idinventario="producto.id"   ></Unidades>
                     </b-tab>
-                    <b-tab title="Lotes" :visible="bloqueado" :idinventario="producto.id" :disabled="precios_lotes" >
+                  <!---  <b-tab title="Lotes" :visible="bloqueado" 
+                    :idinventario="producto.id" :disabled="precios_lotes" >
                         <Lotes></Lotes>
-                    </b-tab>
+                    </b-tab> ---->
                 </b-tabs>
             </div>
              <template v-slot:modal-footer={}>
-                  <b-button size="sm" v-if="edicion==true" variant="info" > <!--v-if sirve para ocultar o mostrar dependiendo de la condicion-->
+                  <b-button size="sm" v-if="edicion==true" variant="info" @click="updateProducto()" > <!--v-if sirve para ocultar o mostrar dependiendo de la condicion-->
                 Editar</b-button>
                 <b-button size="sm" v-if="nuevo==true" variant="success" @click="crearProducto()">
                     Guardar
@@ -380,6 +383,34 @@
                 </b-button>
             </template>     
         </b-modal>
+         <b-modal id="eliminar" centered  modal-class="alerta" :no-close-on-backdrop="true" >
+            <template class="alerta" v-slot:modal-header="{}">
+                <!-- Emulate built in modal header close button action -->
+                <div class="text-danger">
+                    <h4>Advertencia!!</h4>
+                </div>
+                    
+                </template>
+
+                <template class="alerta" v-slot:default="{}">
+                    <h5>Estas seguro que quieres eliminar el proveedor??</h5>
+                    <h6>El producto ya no lo volveras a ver pero si los podras activar
+                        si lo necesitas mas adelante
+                    </h6>
+                </template>
+
+                <template class="alerta" v-slot:modal-footer="{}">
+                
+                <!-- Emulate built in modal footer ok and cancel button actions -->
+                <b-button size="sm" variant="success" @click="deleted()">
+                    Eliminar
+                </b-button>
+                <b-button size="sm" variant="danger" @click="$bvModal.hide('eliminar'),ideliminar=0">
+                    Cancelar
+                </b-button>
+                <!-- Button with custom close trigger value -->
+            </template>
+        </b-modal>    
     </div>
 </template>
 
@@ -397,6 +428,7 @@ export default {
         return{
             ip:process.env.VUE_APP_BASE_URL,
             lista:[],
+            ideliminar:0,
             nuevo:false,
             edicion:false,
             impuestos:{iva:0,
@@ -896,7 +928,7 @@ export default {
                     }else{
                         this.imagen = require('@/assets/producto.png')
                     }
-                    this.producto.id = id
+                    this.producto.id = producto.id
                     this.producto.nombre = producto.nombre
                     this.producto.codigo_producto = producto.codigo_producto
                     this.proveedor.opcion=producto.idproveedor
@@ -1072,6 +1104,118 @@ export default {
             
         
         },
+        updateProducto(){
+            const validacion = this.validarFormulario()
+            if (validacion === 0){
+                var nombre = this.fileimagen ? this.fileimagen.name:''
+                if(nombre.length > 0){
+                    let img=this.fileimagen
+                    let reader = new FileReader() //objecto para convertir la imagen a base64
+                    reader.readAsDataURL(img)  
+                    let name = nombre
+                    reader.onload = e => {
+                        var convertImage= e.target.result
+                        var newImage =convertImage.replace(/^data:image\/[a-z]+;base64,/, "")
+                        this.update(newImage,name)} 
+                }else{
+                    this.update('','')
+                }
+            }else{
+                 this.errorAlert('Hay campos Obligatorios que no se han llenado corretamente')
+            }
+        },
+        update(imagen,nombre){
+            const url = this.ip + '/api/v1.0/inventario/' + this.producto.id +'/'
+            const producto ={
+                codigoProducto:this.producto.codigo_producto.toUpperCase(),
+                nombre:this.producto.nombre.toUpperCase(),
+                idLinea:this.linea.opcion,
+                idSublinea:this.sublinea.opcion,
+                idProveedor:this.proveedor.opcion,
+                idCondicionProducto:this.condicion.opcion,
+                idTipoProducto:this.tipo.opcion,
+                nombreUnidad:this.producto.n_unidad.toUpperCase(),
+                nombreFraccion:this.producto.n_fraccion.toUpperCase(),
+                ubicacion:this.producto.ubicacion.toUpperCase(),
+                equivalenteUnidad:parseInt(this.producto.equivalente_unidad), 
+                cantidadMaxima:parseInt(this.producto.cmaxima),
+                cantidadMinima:parseInt(this.producto.cminima),
+                maximoDescuento:parseInt(this.producto.mdescuento),
+                cantidadUnidad:parseInt(this.producto.cunidades),
+                cantidadFraccion:parseInt(this.producto.cfraccion),
+                costoUnidad:parseFloat(this.producto.costouiva).toFixed(4),
+                costoFraccion:parseFloat(this.producto.costofiva).toFixed(4),
+                precioUnidad:parseFloat(this.producto.preciouiva).toFixed(4),
+                precioFraccion:parseFloat(this.producto.preciofiva).toFixed(4),
+                borrado:false,
+
+
+            } //datos del producto
+            const datos={
+                producto:producto,
+                usuario:'merino92',
+                imagen:{
+                    imagen:imagen,
+                    nombre:nombre
+                }
+            } //armado de objecto json 
+           axios.put(url,datos)
+           .then(response =>{
+               const datos = response.data
+               if(datos.error> 0){
+                   this.errorAlert(datos.response)
+               }else{
+                   this.listarInventario()
+                   this.limpiar()
+                   this.$bvModal.hide('modal')
+                   this.successAlert(datos.response)
+               }
+
+           }).catch(error=>{
+               // eslint-disable-next-line no-console
+               console.log(error)
+               if(error.response){
+                   var msj=error.response.data
+                   this.errorAlert(msj.response)
+               }else{
+                   this.errorAlert(error)
+               }
+           }) 
+        },
+        deleted(){
+           const url = this.ip +'/api/v1.0/inventario/'+this.ideliminar+'/'
+           // eslint-disable-next-line no-console
+           console.log(url)
+           axios.delete(url)
+           .then(response =>{
+               var res = response.data 
+               if(res.error > 0){
+                   this.errorAlert(res.response)
+               }else{
+                   this.listarInventario()
+                   this.ideliminar =0 
+                   this.$bvModal.hide('eliminar')
+                   this.successAlert(res.response)
+               }
+
+           }).catch(error =>{
+               if(error.response){
+                   var res = error.response.data
+                   this.errorAlert(res.response)
+               }else{
+                   this.errorAlert(error)
+               }
+           })
+
+        },
+        alertaEliminar(id){
+            // eslint-disable-next-line no-console
+            console.log(id)
+            this.ideliminar =id
+             // eslint-disable-next-line no-console
+            console.log(this.ideliminar)
+            this.$bvModal.show('eliminar')
+        }
     },
    
     mounted(){
@@ -1185,5 +1329,8 @@ export default {
   -webkit-transition-delay: .2s;
   transition-delay: .2s;
 }
-
+.alerta >.modal-dialog >.modal-content{
+    background-color:white;
+    border-top: 0px;
+}
 </style>

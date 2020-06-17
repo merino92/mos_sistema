@@ -63,7 +63,7 @@
               { header: 'Ajuste Inventario', link: '/app/components/maps' },
             ]"
         />
-        <NavLink
+       <!--- <NavLink
             :activeItem="activeItem"
             header="Components"
             link="/app/components"
@@ -74,7 +74,7 @@
               { header: 'Icons', link: '/app/components/icons' },
               { header: 'Maps', link: '/app/components/maps' },
             ]"
-        />
+        />--->
         <NavLink
           :activeItem="activeItem"
           header="Seguridad"
