@@ -1,34 +1,60 @@
 <template>
-  <div class="auth-page">
-    <b-container>
-     
-      <Widget class="widget-auth mx-auto hola" title="" customHeader>
-           <b-img :src="this.image" fluid alt="Fluid image"></b-img>
-        <p class="widget-auth-info mt-2">
-            Usa tu usuario y clave para acceder
-        </p>
-        <form class="mt mt-5" @submit.prevent="login">
-          <b-alert class="alert-sm" variant="danger" :show="!!errorMessage">
-            {{errorMessage}}
-          </b-alert>
-          <div class="form-group">
-            <input class="form-control no-border" v-model="usuario" ref="text" required type="text" name="email" placeholder="Usuario" />
+  <div>
+    <div class="containerl">
+      <div class="forms-container">
+        <div class="signin-signup">
+          <form action="#" class="sign-in-form">
+            <h2 class="title">Ingresar</h2>
+            <div class="input-field">
+             
+              <input type="text"  v-model="usuario" placeholder="Usuario" />
+            </div>
+            <div class="input-field">
+             
+              <input type="password" v-model="pass" placeholder="Clave" />
+            </div>
+            <input type="submit" @click="login()" value="Entrar" class="btn solid" />
+            
+            
+          </form>
+          <form action="#" class="sign-up-form">
+            <h2 class="title">Sign up</h2>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" placeholder="Username" />
+            </div>
+            <div class="input-field">
+              
+              <input type="email" placeholder="Email" />
+            </div>
+            <div class="input-field">
+              
+              <input type="password" placeholder="Password" />
+            </div>
+            <input type="submit" class="btn" value="Sign up" />
+            <p class="social-text">Or Sign up with social platforms</p>
+           
+          </form>
+        </div>
+      </div>
+
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content1">
+            <h3>ARTEMISA</h3>
+            <p>
+              Sistema de administracion computarizado, te ayudamos
+              con tus necesidades
+            </p>
+            <button class="btn transparent" id="sign-up-btn">
+              conoce mas!!
+            </button>
           </div>
-          <div class="form-group">
-            <input class="form-control md no-border" ref="password" v-model="pass" required type="password" name="password" placeholder="Password" />
-          </div>
-          <b-button type="submit" size="md" class="auth-btn  mb-3" variant="success">Ingresar</b-button>   
-          <b-col class="mb-5"></b-col> 
-        </form>
-        <p class="widget-auth-info">
-          No tienes una cuenta?
-        </p>
-        <router-link class="d-block text-center"  to="login"> <div>Crear una</div></router-link>
-      </Widget>
-    </b-container>
-    <footer class="auth-footer">
-      2020 &copy; Artemisa porwer by MOS Tecnology.
-    </footer>
+          <img :src="require('@/assets/fondo.svg')" class="image" alt="" />
+        </div>
+       
+      </div>
+    </div>
   </div>
 </template>
 
@@ -90,4 +116,359 @@ export default {
       margin-top: 0;
       color:$titulo-color;
     }
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+    .containerl {
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  min-height: 100vh;
+  overflow: hidden;
+}
+    .forms-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+.input-field {
+  max-width: 380px;
+  width: 100%;
+  background-color: #f0f0f0;
+  margin: 10px 0;
+  height: 45px;
+  border-radius: 55px;
+  display: grid;
+  //grid-template-columns: 15% 85%;
+  padding: 0 1.5rem;
+  position: relative;
+}
+
+.input-field i {
+  text-align: center;
+  line-height: 55px;
+  color: #acacac;
+  transition: 0.5s;
+  font-size: 1.1rem;
+}
+
+.input-field input {
+  background: none;
+  outline: none;
+  border: none;
+  line-height: 1;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.input-field input::placeholder {
+  color: #aaa;
+  font-weight: 500;
+}
+.signin-signup {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  left: 75%;
+  width: 50%;
+  transition: 1s 0.7s ease-in-out;
+  display: grid;
+  grid-template-columns: 1fr;
+  z-index: 5;
+}
+form.sign-up-form {
+  opacity: 0;
+  z-index: 1;
+}
+.title {
+  font-size: 2.2rem;
+  color: #444;
+  margin-bottom: 20px;
+}
+form.sign-in-form {
+  z-index: 2;
+}
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0rem 5rem;
+  transition: all 0.2s 0.7s;
+  overflow: hidden;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+.btn {
+  width: 250px;
+  background-color: #1d5b86;
+  border: none;
+  outline: none;
+  height: 39px;
+  border-radius: 49px;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.btn:hover {
+  background-color: #4d84e2;
+}
+
+.panels-container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.containerl:before {
+  content: "";
+  position: absolute;
+  height: 2000px;
+  width: 2000px;
+  top: -10%;
+  right: 48%;
+  transform: translateY(-50%);
+  background-image: linear-gradient(-45deg, #1e4383 0%, #04befe 100%);
+  transition: 1.8s ease-in-out;
+  border-radius: 50%;
+  z-index: 6;
+}
+
+.image {
+  width: 100%;
+  transition: transform 1.1s ease-in-out;
+  transition-delay: 0.4s;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-around;
+  text-align: center;
+  z-index: 6;
+}
+
+.left-panel {
+  pointer-events: all;
+  padding: 3rem 17% 2rem 12%;
+}
+
+.right-panel {
+  pointer-events: none;
+  padding: 3rem 12% 2rem 17%;
+}
+
+.panel .content1 {
+  color: #fff;
+  transition: transform 0.9s ease-in-out;
+  transition-delay: 0.6s;
+}
+
+.panel h3 {
+  font-weight: 600;
+  line-height: 1;
+  font-size: 1.5rem;
+}
+
+.panel p {
+  font-size: 0.95rem;
+  padding: 0.7rem 0;
+}
+
+.btn.transparent {
+  margin: 0;
+  background: none;
+  border: 2px solid #fff;
+  width: 130px;
+  height: 41px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.right-panel .image,
+.right-panel .content {
+  transform: translateX(800px);
+}
+
+/* ANIMATION */
+
+.containerl.sign-up-mode:before {
+  transform: translate(100%, -50%);
+  right: 52%;
+}
+
+.containerl.sign-up-mode .left-panel .image,
+.containerl.sign-up-mode .left-panel .content {
+  transform: translateX(-800px);
+}
+
+.containerl.sign-up-mode .signin-signup {
+  left: 25%;
+}
+
+.containerl.sign-up-mode form.sign-up-form {
+  opacity: 1;
+  z-index: 2;
+}
+
+.containerl.sign-up-mode form.sign-in-form {
+  opacity: 0;
+  z-index: 1;
+}
+
+.containerl.sign-up-mode .right-panel .image,
+.containerl.sign-up-mode .right-panel .content {
+  transform: translateX(0%);
+}
+
+.containerl.sign-up-mode .left-panel {
+  pointer-events: none;
+}
+
+.containerl.sign-up-mode .right-panel {
+  pointer-events: all;
+}
+
+@media (max-width: 870px) {
+  .containerl {
+    min-height: 800px;
+    height: 100vh;
+  }
+  .signin-signup {
+    width: 100%;
+    top: 75%;
+    transform: translate(-50%, -100%);
+    transition: 1s 0.8s ease-in-out;
+  }
+
+  .signin-signup,
+  .containerl.sign-up-mode .signin-signup {
+    left: 50%;
+  }
+
+  .panels-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 2fr 1fr;
+  }
+
+  .panel {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 2.5rem 8%;
+    grid-column: 1 / 2;
+  }
+
+  .right-panel {
+    grid-row: 3 / 4;
+  }
+
+  .left-panel {
+    grid-row: 1 / 2;
+  }
+
+  .image {
+    width: 200px;
+    transition: transform 0.9s ease-in-out;
+    transition-delay: 0.6s;
+  }
+
+  .panel .content1 {
+  color: #fff;
+  transition: transform 0.9s ease-in-out;
+  transition-delay: 0.6s;
+}
+
+  .panel h3 {
+    font-size: 1.2rem;
+  }
+
+  .panel p {
+    font-size: 0.7rem;
+    padding: 0.5rem 0;
+  }
+
+  .btn.transparent {
+    width: 110px;
+    height: 35px;
+    font-size: 0.7rem;
+  }
+
+  .containerl:before {
+    width: 1500px;
+    height: 1500px;
+    transform: translateX(-50%);
+    left: 30%;
+    bottom: 68%;
+    right: initial;
+    top: initial;
+    transition: 2s ease-in-out;
+  }
+
+  .containerl.sign-up-mode:before {
+    transform: translate(-50%, 100%);
+    bottom: 32%;
+    right: initial;
+  }
+
+  .containerl.sign-up-mode .left-panel .image,
+  .containerl.sign-up-mode .left-panel .content {
+    transform: translateY(-300px);
+  }
+
+  .containerl.sign-up-mode .right-panel .image,
+  .containerl.sign-up-mode .right-panel .content {
+    transform: translateY(0px);
+  }
+
+  .right-panel .image,
+  .right-panel .content {
+    transform: translateY(300px);
+  }
+
+  .container.sign-up-mode .signin-signup {
+    top: 5%;
+    transform: translate(-50%, 0);
+  }
+}
+
+@media (max-width: 570px) {
+  form {
+    padding: 0 1.5rem;
+  }
+
+  .image {
+    display: none;
+  }
+  .panel .content1 {
+    padding: 0.5rem 1rem;
+  }
+  .containerl {
+    padding: 1.5rem;
+  }
+
+  .containerl:before {
+    bottom: 72%;
+    left: 50%;
+  }
+
+  .containerl.sign-up-mode:before {
+    bottom: 28%;
+    left: 50%;
+  }
+}
 </style>

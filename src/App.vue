@@ -1,8 +1,13 @@
 <template>
-  <router-view />
+  <transition enter-active-class="animate__fadeInDown" leave-active-class="animate__fadeOutDown">
+    <router-view />
+    </transition>
 </template>
+  
+  
 
 <script>
+import 'animate.css'
 export default {
   name: 'App',
   created() {
